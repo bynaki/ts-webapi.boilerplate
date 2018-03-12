@@ -1,6 +1,6 @@
 # Typescript Boilerplate
 
-[Typescript](https://www.typescriptlang.org)를 개발 언어로 사용하여 `Node.js` 환경에서 실행되는 app이나 module을 개발하기 위한 `Boilerplate`이다. `Development` 환경에서의 컴파일러는 `tsc`를 사용하며 `production` 환경에서 컴파일러는 [Parcel](https://parceljs.org)을 사용한다. `Test`는 [AVA](https://github.com/avajs/ava)를 사용한다.
+[Typescript](https://www.typescriptlang.org)를 개발 언어로 사용하여 `Node.js` 환경에서 실행되는 app이나 module을 개발하기 위한 `Boilerplate`이다. `Development` 환경에서의 컴파일러는 `tsc`를 사용하며 `production` 환경에서 컴파일러는 [Parcel](https://parceljs.org)을 사용한다. 그러나 module을 개발하여 배포할 경우 tsc로 컴파일한다면 .d.ts 파일을 생성할 수 있어 여로모로 이득이 많다.`Test`는 [AVA](https://github.com/avajs/ava)를 사용한다.
 
 
 ## File Structure
@@ -9,7 +9,7 @@
 - **src:** 개발 코드들과 자원들
 - **dist:** src/를 빌드하고 빌드물을 여기에 저장
 - **test:** 테스트 코드들
-- **test.dist:** test/를 빌드하고 빌드물을 여기에 저장
+- **dist.test:** test/를 빌드하고 빌드물을 여기에 저장
 - **util:** util 코드들 & 빌드물
 
 
@@ -62,6 +62,55 @@ yarn test
 ```bash
 yarn test --match='*foo'
 # foo로 시작하는 title를 가진 테스트만 테스트
+```
+
+
+## Raspberry Pi - Dockerfile Build & Docker Usage
+
+**build:**
+
+```bash
+git clone https://github.com/bynaki/typescript.boilerplate.git
+cd typescript.boilerplate
+docker build -t bynaki/typescript.boilerplate .
+```
+
+**run:**
+
+```bash
+# at project
+npm run release
+.
+.
+# in platform
+# RELEASE_URL: 이 프로젝트의 release url
+docker run -p 3000:3000 --restart=on-failure:10 --env PORT=3000 \
+--env NODE_ENV=production --env RELEASE_URL=https://your.release.url \
+--name typescript.boilerplate -d bynaki/typescript.boilerplate "npm start"
+
+# 업데이트
+# at project
+npm run release
+.
+.
+# in platform
+docker restart typescript.boilerplate
+```
+
+**run dev:**
+
+```bash
+docker run -it -p 8001:8001 --env PORT=8001 \
+--name typescript.boilerplate.dev \
+bynaki/typescript.boilerplate "/bin/bash"
+
+# in docker
+npm start
+
+# 업데이트
+# in docker
+npm fetch
+npm start
 ```
 
 
