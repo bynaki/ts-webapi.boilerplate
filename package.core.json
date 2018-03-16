@@ -14,7 +14,6 @@
   "license": "MIT",
   "scripts": {
     "start": "node .",
-    "dev": "npm run build && npm start",
     "build": "tsc && bin/copy \"src/**/!(*.ts)\" \"dist\"",
     "build.parcel": "parcel build --target=node src/app.ts && bin/copy \"src/**/!(*.ts)\" \"dist\"",
     "clean": "rimraf dist",
@@ -30,8 +29,6 @@
   "devDependencies": {
     "@types/fs-extra": "^5.0.1",
     "@types/glob": "^5.0.35",
-    "@types/koa": "^2.0.44",
-    "@types/koa-router": "^7.0.27",
     "ava": "^0.25.0",
     "fourdollar.promisify": "^1.0.5",
     "fs-extra": "^5.0.0",
@@ -40,13 +37,7 @@
     "rimraf": "^2.6.2",
     "typescript": "^2.7.2"
   },
-  "dependencies": {
-    "fourdollar.filewriter": "^1.0.0",
-    "fourdollar.logger": "^1.0.3",
-    "jsonwebtoken": "^8.2.0",
-    "koa": "^2.5.0",
-    "koa-router": "^7.4.0"
-  },
+  "dependencies": {},
   "ava": {
     "files": [
       "dist.test/**/**.spec.js"

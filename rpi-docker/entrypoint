@@ -1,7 +1,7 @@
 #!/bin/bash
 
 exec=$1
-proj="typescript.boilerplate"
+proj="ts-webapi.boilerplate"
 
 # 프로젝트 디렉토리가 있다면..
 if [ -d "/$proj" ]; then

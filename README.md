@@ -1,6 +1,6 @@
-# Typescript Boilerplate
+# Typescript + WebAPI Boilerplate
 
-[Typescript](https://www.typescriptlang.org)를 개발 언어로 사용하여 `Node.js` 환경에서 실행되는 app이나 module을 개발하기 위한 `Boilerplate`이다. `Development` 환경에서의 컴파일러는 `tsc`를 사용하며 `production` 환경에서 컴파일러는 [Parcel](https://parceljs.org)을 사용한다. 그러나 module을 개발하여 배포할 경우 tsc로 컴파일한다면 .d.ts 파일을 생성할 수 있어 여로모로 이득이 많다.`Test`는 [AVA](https://github.com/avajs/ava)를 사용한다.
+[Typescript](https://www.typescriptlang.org)를 개발 언어로 사용하여 `Node.js` 환경에서 실행되는 app이나 module을 개발하기 위한 `Boilerplate`이다. `Development` 환경에서의 컴파일러는 `tsc`를 사용하며 `production` 환경에서 컴파일러는 [Parcel](https://parceljs.org)을 사용한다. 그러나 module을 개발하여 배포할 경우 tsc로 컴파일한다면 .d.ts 파일을 생성할 수 있어 여로모로 이득이 많다.`Test`는 [AVA](https://github.com/avajs/ava)를 사용한다. Web API 개발하기 위한 기본 코딩 파일을 제공한다.
 
 
 ## File Structure
@@ -65,14 +65,14 @@ yarn test --match='*foo'
 ```
 
 
-## Raspberry Pi - Dockerfile Build & Docker Usage
+## on Raspberry Pi - Dockerfile Build & Docker Usage
 
 **build:**
 
 ```bash
-git clone https://github.com/bynaki/typescript.boilerplate.git
-cd typescript.boilerplate
-docker build -t bynaki/typescript.boilerplate .
+git clone https://github.com/bynaki/ts-webapi.boilerplate.git
+cd ts-webapi.boilerplate/rpi-docker
+docker build -t bynaki/ts-webapi.boilerplate .
 ```
 
 **run:**
@@ -86,7 +86,7 @@ npm run release
 # RELEASE_URL: 이 프로젝트의 release url
 docker run -p 3000:3000 --restart=on-failure:10 --env PORT=3000 \
 --env NODE_ENV=production --env RELEASE_URL=https://your.release.url \
---name typescript.boilerplate -d bynaki/typescript.boilerplate "npm start"
+--name ts-webapi.boilerplate -d bynaki/ts-webapi.boilerplate "npm start"
 
 # 업데이트
 # at project
@@ -94,20 +94,30 @@ npm run release
 .
 .
 # in platform
-docker restart typescript.boilerplate
+docker restart ts-webapi.boilerplate
 ```
 
 **run dev:**
 
 ```bash
-docker run -it -p 8001:8001 --env PORT=8001 \
---name typescript.boilerplate.dev \
-bynaki/typescript.boilerplate "/bin/bash"
-
+# at project
+npm run release
+.
+.
+# in platform
+docker run -it -p 8001:8001 \
+--env PORT=8001 --env RELEASE_URL=https://your.release.url \
+--name ts-webapi.boilerplate.dev bynaki/ts-webapi.boilerplate "/bin/bash"
+.
+.
 # in docker
 npm start
 
 # 업데이트
+# at project
+npm run release
+.
+.
 # in docker
 npm fetch
 npm start
