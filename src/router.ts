@@ -18,7 +18,7 @@ export {
 export type IContext = IRouterContext
 export type INext = () => Promise<any>
 
-interface RouterItemInfo {
+interface IEndpointInfo {
   method: string
   path: string|RegExp
   middleware: string
@@ -27,20 +27,38 @@ interface RouterItemInfo {
 
 export class BaseRouter {
   private _prefix: string
+  private _beforeEachs: IMiddleware[]
+  private _befores: {[index: string]: IMiddleware[]}
+  private _endpoints: IEndpointInfo[]
   private _router: KoaRouter
-
 
   constructor() {
     this._router = new KoaRouter({prefix: this._prefix})
-    // if(this._beforeEachs) {
-      
-    // }
-    if(this['routerItemList']) {
-      let list: RouterItemInfo[] = this['routerItemList']
-      list.forEach(item => {
-        this.router[item.method](item.path, this[item.middleware].bind(this))
+    this._beforeEachs || (this._beforeEachs = [])
+    this._befores || (this._befores = {})
+    this._endpoints || (this._endpoints = [])
+
+    this._beforeEachs = this._beforeEachs.map(b => {
+      return (typeof b === 'string')? this[b].bind(this) : b
+    })
+    Object.keys(this._befores).forEach(name => {
+      this._befores[name] = this._befores[name].map(b => {
+        return (typeof b === 'string')? this[b].bind(this) : b
       })
-    }
+    })
+    this._endpoints.forEach(e => {
+      this._befores[e.middleware] || (this._befores[e.middleware] = [])
+      const middlewares = [].concat(this._beforeEachs)
+        .concat(this._befores[e.middleware])
+        .concat(this[e.middleware].bind(this))
+      this.router[e.method](e.path, ...middlewares)
+    })
+    // if(this['routerItemList']) {
+    //   let list: IEndpointInfo[] = this['routerItemList']
+    //   list.forEach(item => {
+    //     this.router[item.method](item.path, this[item.middleware].bind(this))
+    //   })
+    // }
   }
 
   get router() {
@@ -62,12 +80,12 @@ export function BeforeEachWith(middleware: IMiddleware) {
   }
 }
 
-export function AfterEachWith(middleware: IMiddleware) {
-  return (target: any) => {
-    target.prototype._afterEachs || (target.prototype._afterEachs = [])
-    target.prototype._afterEachs.push(middleware)
-  }
-}
+// export function AfterEachWith(middleware: IMiddleware) {
+//   return (target: any) => {
+//     target.prototype._afterEachs || (target.prototype._afterEachs = [])
+//     target.prototype._afterEachs.push(middleware)
+//   }
+// }
 
 export function BeforeEach() {
   return (target: any, name: string, descriptor: PropertyDescriptor) => {
@@ -76,12 +94,12 @@ export function BeforeEach() {
   }
 }
 
-export function AfterEach() {
-  return (target: any, name: string, descriptor: PropertyDescriptor) => {
-    target._afterEachs || (target._afterEachs = [])
-    target._afterEachs.push(name)
-  }
-}
+// export function AfterEach() {
+//   return (target: any, name: string, descriptor: PropertyDescriptor) => {
+//     target._afterEachs || (target._afterEachs = [])
+//     target._afterEachs.push(name)
+//   }
+// }
 
 export function Before(middleware: IMiddleware|string) {
   return (target: any, name: string, descriptor: PropertyDescriptor) => {
@@ -91,21 +109,21 @@ export function Before(middleware: IMiddleware|string) {
   }
 }
 
-export function After(middleware: IMiddleware|string) {
-  return (target: any, name: string, descriptor: PropertyDescriptor) => {
-    target._afters || (target._afters = {})
-    target._afters[name] || (target._afters[name] = [])
-    target._afters[name].push(middleware)
-  }
-}
+// export function After(middleware: IMiddleware|string) {
+//   return (target: any, name: string, descriptor: PropertyDescriptor) => {
+//     target._afters || (target._afters = {})
+//     target._afters[name] || (target._afters[name] = [])
+//     target._afters[name].push(middleware)
+//   }
+// }
 
 function Method(method: string
   , path: string|RegExp, withAuth: boolean = false) {
   return (target: any, name: string, descriptor: PropertyDescriptor) => {
-    if(!target.routerItemList) {
-      target.routerItemList = []
+    if(!target._endpoints) {
+      target._endpoints = []
     }
-    let list: RouterItemInfo[] = target.routerItemList
+    let list: IEndpointInfo[] = target._endpoints
     list.push({
       method,
       path,

@@ -15,7 +15,7 @@ import cf from './config'
 
 import errorRouter from './routers/error-router'
 import heroRouter from './routers/hero-router'
-import beforeafterRouter from './routers/beforeafter-router'
+import routeRouter from './routers/route-router'
 
 const app = new Koa()
 
@@ -46,22 +46,22 @@ app.use(responseLogger('Response'))
 app.use(authentication(cf.jwt))
 
 // register routers
-app.use(errorRouter.routes())
-app.use(errorRouter.allowedMethods())
-app.use(heroRouter.routes())
-app.use(heroRouter.allowedMethods())
-app.use(beforeafterRouter.routes())
-app.use(beforeafterRouter.allowedMethods())
+// app.use(errorRouter.routes())
+// app.use(errorRouter.allowedMethods())
+// app.use(heroRouter.routes())
+// app.use(heroRouter.allowedMethods())
+app.use(routeRouter.routes())
+app.use(routeRouter.allowedMethods())
 
 // not found
 app.use(ctx => {
   throw new ErrorNotFound(`requested ${ctx.method} ${ctx.url}`)
 })
 
+export default app
+
 // error handler
 app.on('error', err => {
   logger.log(`sent error "${err.message}" to the client`)
   logger.error(err)
 })
-
-app.listen(3000)
