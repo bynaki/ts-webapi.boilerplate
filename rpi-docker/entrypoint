@@ -11,5 +11,6 @@ else # 없다면
 fi
 
 cd /$proj
-npm run fetch
+curl -o archive.tar.gz "$RELEASE_URL"
+tar xvfz archive.tar.gz
 $exec
