@@ -13,4 +13,5 @@ fi
 cd /$proj
 curl -o archive.tar.gz "$RELEASE_URL"
 tar xvfz archive.tar.gz
+npm install
 $exec
