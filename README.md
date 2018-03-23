@@ -27,7 +27,7 @@ yarn build && yarn start
 
 ### Parcel로 build & start
 
-`parcel`로 bundle하여 실행한다. `production` 버젼이다. `docker`안이나 `server platform`에서 사용될 것이다. 그러나 만약 `npm`으로 publish하거나 다른 프로젝트에 module로 사용할 것 이라면 parcel build보다는 tsc build가 더 좋다.
+`parcel`로 bundle하여 실행한다. `production` 버젼이다. `docker`안이나 `server platform`에서 사용될 것이다. 그러나 만약 `npm`으로 publish하거나 다른 프로젝트에 module로 사용할 것 이라면 parcel로 빌드해서는 않된다.
 
 ```bash
 yarn clean
@@ -63,6 +63,8 @@ yarn test
 yarn test --match='*foo'
 # foo로 시작하는 title를 가진 테스트만 테스트
 ```
+
+다른 방법으로 `package.json`의 `ava` 섹션에서 `match` 옵션을 작성하여 부분 테스트 할 수 있다.
 
 
 ## on Raspberry Pi - Dockerfile Build & Docker Usage

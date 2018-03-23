@@ -18,7 +18,7 @@ import {
 
 
 export function authentication(config: JwtConfig) {
-  return async (ctx: Context, next: () => Promise<any>) => {
+  return (ctx: Context, next: () => Promise<any>) => {
     // read the token from header of url
     const token = ctx.headers['x-access-token'] || ctx.query.token
     
@@ -40,12 +40,11 @@ export function authentication(config: JwtConfig) {
         throw new Error('The authentication has expired.')
       }
       ctx['_decoded'] = decoded
+      return next()
     } catch(err) {
       // if it has failed to verify, it will return an error message
-      ctx['_authError'] = new ErrorWithStatusCode((err as Error).message, 401)
-    } finally {
-      next()
-    }
+      throw new ErrorUnauthorized(err.message)
+    } 
   }
 }
 

@@ -5,8 +5,11 @@ import {
   IContext,
   INext,
   KoaRouter,
-} from '../router'
-
+} from 'koa-decorouter'
+import {
+  ErrorBadRequest,
+  ErrorUnauthorized,
+} from '../errors'
 
 @Prefix('/v1/error')
 class ErrorRouter extends BaseRouter {
@@ -17,6 +20,16 @@ class ErrorRouter extends BaseRouter {
   @Get('/internal')
   internalError(ctx: IContext, next: INext) {
     throw new Error('Internal Error!!')
+  }
+
+  @Get('/badrequest')
+  badRequestError(ctx: IContext, next: INext) {
+    throw new ErrorBadRequest('Bad Request Error!!')
+  }
+
+  @Get('/unauthorized')
+  unauthorizedError(ctx: IContext, next: INext) {
+    throw new ErrorUnauthorized('Unauthorized Error!!')
   }
 }
 

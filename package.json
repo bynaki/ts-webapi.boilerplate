@@ -2,7 +2,8 @@
   "name": "ts-webapi.boilerplate",
   "version": "0.1.0",
   "description": "Typescript + Web API poilerpalte",
-  "main": "dist/server.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": {
     "name": "bynaki",
     "email": "bynaki@icloud.com"
@@ -46,7 +47,7 @@
     "fourdollar.logger": "^1.0.3",
     "jsonwebtoken": "^8.2.0",
     "koa": "^2.5.0",
-    "koa-router": "^7.4.0"
+    "koa-decorouter": "^0.1.5"
   },
   "ava": {
     "files": [

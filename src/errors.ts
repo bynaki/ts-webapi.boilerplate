@@ -1,8 +1,9 @@
 /**
  * status code 와 함께 Error 객체
  */
+
 export class ErrorWithStatusCode extends Error {
-  constructor(message: string, public statusCode: number = 200) {
+  constructor(message: string, public status: number = 200) {
     super(message)
   }
 }

@@ -15,7 +15,7 @@ import cf from './config'
 
 import errorRouter from './routers/error-router'
 import heroRouter from './routers/hero-router'
-import routeRouter from './routers/route-router'
+import authRouter from './routers/auth-router'
 
 const app = new Koa()
 
@@ -25,12 +25,15 @@ app.use(async (ctx, next) => {
     await next()
   } catch(e) {
     const err: ErrorWithStatusCode = e
-    ctx.status = err.statusCode || 500
-    ctx.type = 'json'
+    ctx.status = err.status || 500
     ctx.body = {
-      errorMessage: err.message,
-      errorName: err.name,
-      errorStack: err.stack,
+      data: null,
+      error: {
+        message: err.message,
+        name: err.name,
+        stack: err.stack,
+        status: err.status,
+      },
     }
     ctx.app.emit('error', err, ctx)
   }
@@ -46,12 +49,12 @@ app.use(responseLogger('Response'))
 app.use(authentication(cf.jwt))
 
 // register routers
-// app.use(errorRouter.routes())
-// app.use(errorRouter.allowedMethods())
-// app.use(heroRouter.routes())
-// app.use(heroRouter.allowedMethods())
-app.use(routeRouter.routes())
-app.use(routeRouter.allowedMethods())
+app.use(errorRouter.routes())
+app.use(errorRouter.allowedMethods())
+app.use(heroRouter.routes())
+app.use(heroRouter.allowedMethods())
+app.use(authRouter.routes())
+app.use(authRouter.allowedMethods())
 
 // not found
 app.use(ctx => {

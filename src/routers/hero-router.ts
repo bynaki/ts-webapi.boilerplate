@@ -5,7 +5,8 @@ import {
   IContext,
   INext,
   KoaRouter,
-} from '../router'
+} from 'koa-decorouter'
+import { ErrorNotFound } from '../errors';
 
 
 @Prefix('/v1/heroes')
@@ -18,7 +19,24 @@ class HeroRouter extends BaseRouter {
 
   @Get('/')
   getAll(ctx: IContext, next: INext) {
-    ctx.body = this.heroes
+    ctx.body = {
+      data: this.heroes,
+      error: null,
+    }
+  }
+
+  @Get('/:id')
+  getOne(ctx: IContext, next: INext) {
+    const id = Number(ctx.params.id)
+    const hero = this.heroes.find(hero => hero.id === id)
+    if(hero) {
+      ctx.body = {
+        data: hero,
+        error: null,
+      }
+    } else {
+      throw new ErrorNotFound('No hero found with the given id.')
+    }
   }
 }
 

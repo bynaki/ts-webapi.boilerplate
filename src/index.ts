@@ -7,7 +7,7 @@ import {
 
 const port = normalizePort(process.env.PORT || 3000)
 
-const server = http.createServer(app.callback())
+export const server = http.createServer(app.callback())
 server.listen(port)
 server.on('error', onError)
 server.on('listening', onListening)

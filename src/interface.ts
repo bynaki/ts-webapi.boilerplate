@@ -3,6 +3,8 @@
  */
 
 export interface DecodedToken {
+  user?: string
+  permissions?: string[]
   // name: string  // 토큰 이름을 정한다. 약속된 이름이다 보안을 위해 수시로 바뀔수 있다.
   iat: number   // 생성시간
   exp: number   // 만료시간
