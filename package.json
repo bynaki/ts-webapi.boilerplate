@@ -1,7 +1,7 @@
 {
   "name": "ts-webapi.boilerplate",
   "version": "0.1.0",
-  "description": "Typescript + Web API poilerpalte",
+  "description": "Typescript + Web API, Boilerpalte",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": {
@@ -15,9 +15,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node .",
-    "dev": "npm run build && npm start",
-    "build": "tsc && bin/copy \"src/**/!(*.ts)\" \"dist\"",
-    "build.parcel": "parcel build --target=node src/app.ts && bin/copy \"src/**/!(*.ts)\" \"dist\"",
+    "dev": "npm run build.tsc && npm start",
+    "build.tsc": "tsc && bin/copy \"src/**/!(*.ts)\" \"dist\"",
+    "build.parcel": "parcel build --target=node src/index.ts && bin/copy \"src/**/!(*.ts)\" \"dist\"",
     "clean": "rimraf dist",
     "archive": "tar cvfz archive.tar.gz dist/ package.json",
     "release": "npm run clean && npm run build.parcel && npm run archive && bin/release",
