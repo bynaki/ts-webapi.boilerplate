@@ -1,4 +1,5 @@
 import * as Koa from 'koa'
+import * as bodyParser from 'koa-bodyparser'
 import {
   responseTime,
   responseLogger,
@@ -39,6 +40,10 @@ app.use(async (ctx, next) => {
   }
 })
 
+// body parser (for post method)
+// ex. ctx.request.body
+app.use(bodyParser())
+
 // x-response-time
 app.use(responseTime())
 
@@ -61,10 +66,10 @@ app.use(ctx => {
   throw new ErrorNotFound(`requested ${ctx.method} ${ctx.url}`)
 })
 
-export default app
-
 // error handler
 app.on('error', err => {
   logger.log(`sent error "${err.message}" to the client`)
   logger.error(err)
 })
+
+export default app

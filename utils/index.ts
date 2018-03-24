@@ -27,9 +27,9 @@ export async function copyAssets(src: string, dest: string) {
   })
 }
 
-const releaseDir = '/Users/naki/cloud/www/release'
+const releaseDir = '../../www/release'
 export async function release() {
-  const packFile = await readFile(resolve(__dirname, '../package.json'))
+  const packFile = await readFile('package.json')
   const pack = JSON.parse(packFile.toString())
   await copy('archive.tar.gz', join(releaseDir, pack.name))
 }

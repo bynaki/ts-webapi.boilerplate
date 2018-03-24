@@ -13,11 +13,15 @@
     "url": "https://github.com/bynaki/ts-webapi.boilerplate.git"
   },
   "license": "MIT",
+  "config": {
+    "srcMain": "src/index.ts"
+  },
   "scripts": {
+    "name": "echo $npm_package_name",
     "start": "node .",
     "dev": "npm run build.tsc && npm start",
     "build.tsc": "tsc && bin/copy \"src/**/!(*.ts)\" \"dist\"",
-    "build.parcel": "parcel build --target=node src/index.ts && bin/copy \"src/**/!(*.ts)\" \"dist\"",
+    "build.parcel": "parcel build --target=node \"$npm_package_config_srcMain\" && bin/copy \"src/**/!(*.ts)\" \"dist\"",
     "clean": "rimraf dist",
     "archive": "tar cvfz archive.tar.gz dist/ package.json",
     "release": "npm run clean && npm run build.parcel && npm run archive && bin/release",
@@ -26,7 +30,7 @@
     "test": "npm run build.test && ava",
     "test.watch": "npm run build.test && ava --watch",
     "clean.test": "rimraf dist.test",
-    "fetch": "curl -o archive.tar.gz \"$RELEASE_URL\" && tar xvfz archive.tar.gz"
+    "fetch": "curl -o archive.tar.gz \"$RELEASE_URL\" && tar xvfz archive.tar.gz && npm install"
   },
   "devDependencies": {
     "@types/fs-extra": "^5.0.1",
@@ -47,6 +51,7 @@
     "fourdollar.logger": "^1.0.3",
     "jsonwebtoken": "^8.2.0",
     "koa": "^2.5.0",
+    "koa-bodyparser": "^4.2.0",
     "koa-decorouter": "^0.1.5"
   },
   "ava": {

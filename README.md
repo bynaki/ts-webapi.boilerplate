@@ -42,7 +42,7 @@ yarn build.parcel && yarn start
 
 ### Release
 
-`parcel`로 bundle하고 `.tar.gz`로 압축해 지정한 곳으로 release 한다. 어디로 release할 지는 `utils/index.ts`에 `release()` 함수를 수정함으로 변경 가능하다.
+`parcel`로 bundle하고 `.tar.gz`로 압축해 지정한 곳으로 release 한다. 어디로 release할 지는 `utils/index.ts`에 `release()` 함수를 따로 작성함으로 변경 가능하다.
 
 ```bash
 yarn release
