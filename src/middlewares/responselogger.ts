@@ -1,6 +1,4 @@
-import {
-  Logger,
-} from '../log'
+import Logger from '../log'
 import {
   Context,
 } from 'koa'

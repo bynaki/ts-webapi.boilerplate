@@ -51,3 +51,24 @@ export function authentication(config: JwtConfig) {
 export function getDecodedToken(ctx: Context): DecodedToken {
   return ctx['_decoded']
 }
+
+export function certify(...permissions: string[]) {
+  return (ctx: Context, next: () => Promise<any>) => {
+    const decoded = getDecodedToken(ctx)
+    if(decoded && decoded.user && (decoded.user === ctx.params.user)) {
+      decoded.permissions = decoded.permissions || []
+      if(permissions.indexOf('read') !== -1 
+        && decoded.permissions.indexOf('read') === -1) {
+        throw new ErrorUnauthorized('You have no authority.')
+      }
+      if(permissions.indexOf('write') !== -1 
+        && decoded.permissions.indexOf('write') === -1) {
+        throw new ErrorUnauthorized('You have no authority.')
+      }
+    } else {
+      throw new ErrorUnauthorized('You are not me.')
+    }
+    next()
+  }
+}
+

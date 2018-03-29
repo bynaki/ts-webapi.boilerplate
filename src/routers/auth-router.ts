@@ -13,33 +13,13 @@ import {
   ErrorUnauthorized,
 } from '../errors'
 import {
-  getDecodedToken,
+  certify,
 } from '../middlewares/authentication'
 
 
-function auth(...permissions: string[]) {
-  return (ctx: IContext, next: INext) => {
-    const decoded = getDecodedToken(ctx)
-    if(decoded && decoded.user && (decoded.user === ctx.params.user)) {
-      decoded.permissions = decoded.permissions || []
-      if(permissions.indexOf('read') !== -1 
-        && decoded.permissions.indexOf('read') === -1) {
-        throw new ErrorUnauthorized('You have no authority.')
-      }
-      if(permissions.indexOf('write') !== -1 
-        && decoded.permissions.indexOf('write') === -1) {
-        throw new ErrorUnauthorized('You have no authority.')
-      }
-    } else {
-      throw new ErrorUnauthorized('You are not me.')
-    }
-    next()
-  }
-}
-
 @Prefix('/v1/auth')
 class AuthRouter extends BaseRouter {
-  @Before(auth())
+  @Before(certify())
   @Get('/:user')
   user(ctx: IContext, next: INext) {
     ctx.body = {
@@ -48,7 +28,7 @@ class AuthRouter extends BaseRouter {
     }
   }
   
-  @Before(auth('read'))
+  @Before(certify('read'))
   @Get('/:user/do')
   read(ctx: IContext, next: INext) {
     ctx.body = {
@@ -57,7 +37,7 @@ class AuthRouter extends BaseRouter {
     }
   }
 
-  @Before(auth('write'))
+  @Before(certify('write'))
   @Post('/:user/do')
   write(ctx: IContext, next: INext) {
     ctx.body = {

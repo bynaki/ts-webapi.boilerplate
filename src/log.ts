@@ -8,6 +8,5 @@ import {
 Logger.writer.link = new FileWriter(join(__dirname, 'log/access.log'), '1d')
 Logger.format = ':time: > [:name:] :msg:'
 
-export {Logger}
-
-export const logger = new Logger('Internal')
+export default Logger
+// export const logger = new Logger('Internal')

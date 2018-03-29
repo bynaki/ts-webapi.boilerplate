@@ -1,17 +1,21 @@
 import test from 'ava'
 import app from '../src/app'
-import * as http from 'http'
+import { Server } from 'http'
 import axios, { AxiosError } from 'axios'
 import {
   sign,
 } from 'jsonwebtoken'
 import cf from '../src/config'
 
-const server = http.createServer(app.callback())
+
+let server: Server
 const req = axios.create({baseURL: 'http://localhost:8001/v1'})
 
 test.before(t => {
-  server.listen(8001)
+  app.on('error', err => {
+    console.log(err.message)
+  })
+  server = app.listen(8001)
 })
 
 test.after(t => {

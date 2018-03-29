@@ -1,13 +1,17 @@
 import test from 'ava'
 import app from '../src/app'
-import * as http from 'http'
+import { Server } from 'http'
 import axios, {AxiosError} from 'axios'
 
-const server = http.createServer(app.callback())
+
+let server: Server
 const req = axios.create({baseURL: 'http://localhost:8002/v1'})
 
 test.before(t => {
-  server.listen(8002)
+  app.on('error', err => {
+    console.log(err.message)
+  })
+  server = app.listen(8002)
 })
 
 test.after(t => {

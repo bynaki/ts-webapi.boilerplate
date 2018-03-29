@@ -1,19 +1,23 @@
-import * as http from 'http'
 import app from './app'
-import {
-  logger,
-} from './log'
+import Logger from './log'
 
 
+const l = new Logger('Server')
 const port = normalizePort(process.env.PORT || 3000)
 
-export const server = http.createServer(app.callback())
-server.listen(port)
-server.on('error', onError)
-server.on('listening', onListening)
+// error handler
+app.on('error', err => {
+  l.error(err)
+  l.log(`sent error "${err.message}" to the client`)
+})
+
+// listening
+app.listen(port, () => {
+  l.log(`Listening on port ${port}`)
+})
 
 function normalizePort(val: number|string): number|string|boolean {
-  let port: number = (typeof val === 'string')? parseInt(val) : val
+  const port: number = (typeof val === 'string')? parseInt(val) : val
   if(isNaN(port)) {
     return val
   } else if(port >= 0) {
@@ -21,34 +25,4 @@ function normalizePort(val: number|string): number|string|boolean {
   } else {
     return false
   }
-}
-
-function onError(error: NodeJS.ErrnoException): void {
-  if(error.syscall !== 'listen') {
-    logger.error(error)
-    throw error
-  }
-  let bind = (typeof port === 'string')? `Pipe ${port}` : `Port ${port}`
-  switch(error.code) {
-    case 'EACCES': {
-      logger.error(`${bind} requires elevated privileges`)
-      process.exit(1)
-      break
-    }
-    case 'EADDRINUSE': {
-      logger.error(`${bind} is already in use`)
-      process.exit(1)
-      break
-    }
-    default: {
-      logger.error(error)
-      throw error
-    }
-  }
-}
-
-function onListening(): void {
-  let addr = server.address()
-  let bind = (typeof addr === 'string')? `pipe ${addr}` : `port ${addr.port}`
-  logger.log(`Listening on ${bind}`)
 }

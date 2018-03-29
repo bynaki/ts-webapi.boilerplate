@@ -5,3 +5,4 @@ export {
   authentication,
   getDecodedToken,
 } from './authentication'
+export {errorHandler} from './errorhandler'
