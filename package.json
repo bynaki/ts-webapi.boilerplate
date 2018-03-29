@@ -38,6 +38,8 @@
     "@types/koa": "^2.0.44",
     "@types/koa-bodyparser": "^4.2.0",
     "@types/koa-router": "^7.0.27",
+    "@types/socket.io": "^1.4.32",
+    "@types/socket.io-client": "^1.4.32",
     "ava": "^0.25.0",
     "axios": "^0.18.0",
     "fourdollar.promisify": "^1.0.5",
@@ -45,6 +47,7 @@
     "glob": "^7.1.2",
     "parcel-bundler": "^1.6.2",
     "rimraf": "^2.6.2",
+    "socket.io-client": "^2.0.4",
     "typescript": "^2.7.2"
   },
   "dependencies": {
@@ -53,7 +56,8 @@
     "jsonwebtoken": "^8.2.0",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
-    "koa-decorouter": "^0.1.5"
+    "koa-decorouter": "^0.1.5",
+    "socket.io": "^2.0.4"
   },
   "ava": {
     "files": [
